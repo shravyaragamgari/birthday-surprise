@@ -1,0 +1,621 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise For You ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: radial-gradient(circle at top, #51206e, #170b35 65%, #09051b);
+  color: white;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+
+#stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  color: #fff0c9;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: .2; transform: scale(.7); }
+  to { opacity: 1; transform: scale(1.3); }
+}
+
+.screen {
+  min-height: 100vh;
+  width: 100%;
+  display: none;
+  position: relative;
+  z-index: 2;
+  padding: 30px 18px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.screen.active {
+  display: flex;
+  animation: fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  font-size: clamp(32px, 7vw, 52px);
+  color: #ffd5f3;
+  text-shadow: 0 0 20px #ff5bd6;
+  margin: 15px 0;
+}
+
+h2 {
+  color: #ffe0f5;
+  font-size: 27px;
+}
+
+p {
+  line-height: 1.8;
+  font-size: 18px;
+  max-width: 520px;
+}
+
+button {
+  padding: 15px 27px;
+  border: 1px solid #ffc4ef;
+  border-radius: 40px;
+  color: white;
+  font-size: 17px;
+  background: linear-gradient(120deg, #d83eaa, #8648e9);
+  box-shadow: 0 0 25px #df56d5;
+  cursor: pointer;
+  margin: 15px 5px;
+  transition: transform .3s;
+}
+
+button:hover {
+  transform: scale(1.06);
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.small {
+  font-size: 14px;
+  color: #e9c9ed;
+}
+
+.glow {
+  font-size: 70px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.12); }
+}
+
+/* Cake */
+
+.cake-area {
+  margin: 30px 0;
+}
+
+.cake {
+  position: relative;
+  width: 210px;
+  margin: 0 auto;
+}
+
+.icing {
+  height: 65px;
+  background: #ffadd8;
+  border-radius: 18px 18px 8px 8px;
+  border-bottom: 10px dotted #fff1f7;
+  box-shadow: 0 0 20px #ff8bcf;
+}
+
+.cake-base {
+  height: 65px;
+  background: #a84eaa;
+  border-radius: 5px 5px 20px 20px;
+  margin-top: 5px;
+  box-shadow: 0 10px 20px #0006;
+}
+
+.candles {
+  display: flex;
+  justify-content: center;
+  gap: 27px;
+  position: absolute;
+  top: -48px;
+  left: 0;
+  right: 0;
+}
+
+.candle {
+  width: 10px;
+  height: 48px;
+  background: repeating-linear-gradient(
+    45deg, #fff, #fff 5px, #f58bce 5px, #f58bce 10px
+  );
+  border-radius: 4px;
+  position: relative;
+}
+
+.flame {
+  position: absolute;
+  width: 14px;
+  height: 21px;
+  top: -23px;
+  left: -2px;
+  background: radial-gradient(ellipse, #fff8a0, #ff9d25, #ff4d39);
+  border-radius: 50% 50% 40% 40%;
+  box-shadow: 0 0 18px #ffb52e;
+  animation: flicker .5s infinite alternate;
+  transform-origin: bottom;
+}
+
+@keyframes flicker {
+  to { transform: rotate(8deg) scale(.85); }
+}
+
+.candle.off .flame {
+  display: none;
+}
+
+/* Envelope */
+
+.envelope {
+  width: min(280px, 80vw);
+  height: 180px;
+  background: #f4a8d2;
+  border-radius: 8px;
+  position: relative;
+  margin: 35px auto;
+  cursor: pointer;
+  box-shadow: 0 0 35px #f78bd8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #70285d;
+  font-size: 22px;
+}
+
+.envelope::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-left: 140px solid transparent;
+  border-right: 140px solid transparent;
+  border-top: 100px solid #ffcee8;
+  transform-origin: top;
+  transition: transform .7s;
+}
+
+.envelope.open::before {
+  transform: rotateX(180deg);
+}
+
+.envelope span {
+  position: relative;
+  z-index: 2;
+}
+
+/* Letter */
+
+.letter {
+  display: none;
+  background: #fff0f6;
+  color: #61284e;
+  width: min(540px, 92vw);
+  padding: 28px;
+  border-radius: 15px;
+  box-shadow: 0 0 35px #ff7bc8;
+  animation: fadeIn 1s ease;
+  white-space: pre-line;
+  line-height: 1.9;
+  font-size: 17px;
+}
+
+/* Falling sparkles */
+
+.sparkle {
+  position: fixed;
+  top: -30px;
+  z-index: 10;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+
+<!-- STAGE 1: INVITATION -->
+
+<section class="screen active" id="stage1">
+
+  <div class="glow">💌</div>
+
+  <p>A little something has been waiting for you...</p>
+
+  <h1>Hey, My Favourite Person!</h1>
+
+  <p>
+    Today is not just another day.
+    Someone has made something special
+    just for you. ❤️
+  </p>
+
+  <button onclick="startSurprise()">
+    Open Your Surprise ✨
+  </button>
+
+  <p class="small">Made with love, just for you.</p>
+
+</section>
+
+
+<!-- STAGE 2: BIRTHDAY REVEAL -->
+
+<section class="screen" id="stage2">
+
+  <div class="glow">🎉</div>
+
+  <h1>Happy Birthday!</h1>
+
+  <h2 id="personName"></h2>
+
+  <p>
+    Today, the stars shine a little brighter
+    because it's your special day! ✨
+  </p>
+
+  <button onclick="goToCake()">
+    There's More For You 💜
+  </button>
+
+</section>
+
+
+<!-- STAGE 3: INTERACTIVE CAKE -->
+
+<section class="screen" id="stage3">
+
+  <h1>Make A Wish! 🎂</h1>
+
+  <p>
+    Three little candles, three beautiful wishes.
+    Tap each candle flame to blow it out!
+  </p>
+
+  <div class="cake-area">
+
+    <div class="cake">
+
+      <div class="candles">
+
+        <div class="candle" onclick="blowCandle(0)">
+          <div class="flame"></div>
+        </div>
+
+        <div class="candle" onclick="blowCandle(1)">
+          <div class="flame"></div>
+        </div>
+
+        <div class="candle" onclick="blowCandle(2)">
+          <div class="flame"></div>
+        </div>
+
+      </div>
+
+      <div class="icing"></div>
+      <div class="cake-base"></div>
+
+    </div>
+
+  </div>
+
+  <p id="candleStatus">3 wishes are waiting for you! 🕯️</p>
+
+  <button id="cakeNext" onclick="goToLetter()" disabled>
+    Open My Letter 💌
+  </button>
+
+</section>
+
+
+<!-- STAGE 4: LOVE LETTER -->
+
+<section class="screen" id="stage4">
+
+  <h1>A Little Letter For You ❤️</h1>
+
+  <p>Something from my heart, just for you.</p>
+
+  <div class="envelope" id="envelope" onclick="openLetter()">
+    <span>Tap to open 💌</span>
+  </div>
+
+  <div class="letter" id="letter">
+
+    <h2>To My Favourite Human ❤️</h2>
+
+    <div id="letterContent"></div>
+
+    <h2>Forever sending you hugs! 💗</h2>
+
+    <p>With all my love,</p>
+    <h2 id="senderName"></h2>
+
+  </div>
+
+</section>
+
+
+<script>
+
+// =====================================
+// PERSONALISE YOUR BIRTHDAY WEBSITE
+// =====================================
+
+const CONFIG = {
+
+  birthdayPerson: "YOUR LOVE'S NAME",
+
+  yourName: "YOUR NAME",
+
+  birthdayMessage: `
+Happy Birthday, my love! ❤️
+
+I hope this new year of your life
+brings you endless happiness,
+beautiful memories and everything
+your heart wishes for.
+
+Thank you for being you.
+
+You make ordinary days special,
+and I hope today makes you feel
+as special as you truly are.
+
+No matter where life takes us,
+I will always be cheering for you.
+
+Keep smiling, keep shining,
+and never stop dreaming.
+
+You deserve all the magic in this world.
+
+Happy Birthday once again! 💜
+  `
+
+};
+
+
+// =====================================
+// STAR BACKGROUND
+// =====================================
+
+const starContainer = document.getElementById("stars");
+
+for (let i = 0; i < 65; i++) {
+
+  const star = document.createElement("span");
+
+  star.className = "star";
+  star.textContent = "✦";
+
+  star.style.left = Math.random() * 100 + "%";
+  star.style.top = Math.random() * 100 + "%";
+
+  star.style.fontSize = (5 + Math.random() * 12) + "px";
+  star.style.animationDelay = Math.random() * 3 + "s";
+
+  starContainer.appendChild(star);
+
+}
+
+
+// =====================================
+// SCREEN NAVIGATION
+// =====================================
+
+function showStage(stageNumber) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById("stage" + stageNumber)
+    .classList.add("active");
+
+  window.scrollTo(0, 0);
+}
+
+
+// =====================================
+// COLOURFUL SPARKLES
+// =====================================
+
+function createSparkles(count = 100) {
+
+  const emojis = [
+    "✨", "💖", "🌟", "💕",
+    "💜", "🎉", "🦋", "⭐"
+  ];
+
+  for (let i = 0; i < count; i++) {
+
+    const sparkle = document.createElement("div");
+
+    sparkle.className = "sparkle";
+
+    sparkle.textContent =
+      emojis[Math.floor(Math.random() * emojis.length)];
+
+    sparkle.style.left = Math.random() * 100 + "vw";
+
+    sparkle.style.fontSize =
+      (15 + Math.random() * 22) + "px";
+
+    sparkle.style.animationDuration =
+      (3 + Math.random() * 4) + "s";
+
+    sparkle.style.animationDelay =
+      Math.random() * 2 + "s";
+
+    document.body.appendChild(sparkle);
+
+    setTimeout(() => sparkle.remove(), 8500);
+
+  }
+
+}
+
+
+// =====================================
+// START SURPRISE
+// =====================================
+
+function startSurprise() {
+
+  document.getElementById("personName").textContent =
+    CONFIG.birthdayPerson + " ❤️";
+
+  createSparkles(150);
+
+  showStage(2);
+
+}
+
+
+function goToCake() {
+
+  showStage(3);
+
+  createSparkles(50);
+
+}
+
+
+// =====================================
+// BLOW OUT THE CANDLES
+// =====================================
+
+let candlesBlown = 0;
+
+function blowCandle(index) {
+
+  const candle = document.querySelectorAll(".candle")[index];
+
+  if (candle.classList.contains("off")) {
+    return;
+  }
+
+  candle.classList.add("off");
+
+  candlesBlown++;
+
+  const remaining = 3 - candlesBlown;
+
+  document.getElementById("candleStatus").textContent =
+    remaining === 0
+      ? "All your wishes are released into the universe! 🌟"
+      : remaining + " more candle(s) to go! 💖";
+
+  if (candlesBlown === 3) {
+
+    createSparkles(100);
+
+    document.getElementById("cakeNext").disabled = false;
+
+  }
+
+}
+
+
+// =====================================
+// OPEN LETTER
+// =====================================
+
+function goToLetter() {
+
+  document.getElementById("letterContent").textContent =
+    CONFIG.birthdayMessage.trim();
+
+  document.getElementById("senderName").textContent =
+    CONFIG.yourName;
+
+  showStage(4);
+
+}
+
+
+function openLetter() {
+
+  const envelope = document.getElementById("envelope");
+
+  if (envelope.classList.contains("open")) {
+    return;
+  }
+
+  envelope.classList.add("open");
+
+  createSparkles(120);
+
+  setTimeout(() => {
+
+    envelope.style.display = "none";
+
+    document.getElementById("letter").style.display = "block";
+
+  }, 700);
+
+}
+
+</script>
+
+</body>
+</html>
