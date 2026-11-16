@@ -117,73 +117,101 @@ button:disabled {
   50% { transform: scale(1.12); }
 }
 
-/* Cake */
+/* Diya */
 
-.cake-area {
-  margin: 30px 0;
-}
-
-.cake {
-  position: relative;
-  width: 210px;
-  margin: 0 auto;
-}
-
-.icing {
-  height: 65px;
-  background: #ffadd8;
-  border-radius: 18px 18px 8px 8px;
-  border-bottom: 10px dotted #fff1f7;
-  box-shadow: 0 0 20px #ff8bcf;
-}
-
-.cake-base {
-  height: 65px;
-  background: #a84eaa;
-  border-radius: 5px 5px 20px 20px;
-  margin-top: 5px;
-  box-shadow: 0 10px 20px #0006;
-}
-
-.candles {
+.diya-area {
+  margin: 55px 0 35px;
   display: flex;
   justify-content: center;
-  gap: 27px;
-  position: absolute;
-  top: -48px;
-  left: 0;
-  right: 0;
+  align-items: center;
 }
 
-.candle {
-  width: 10px;
-  height: 48px;
-  background: repeating-linear-gradient(
-    45deg, #fff, #fff 5px, #f58bce 5px, #f58bce 10px
-  );
-  border-radius: 4px;
+.diya {
+  width: 155px;
+  height: 65px;
   position: relative;
+  cursor: pointer;
+  border-radius: 15% 15% 65% 65% / 20% 20% 85% 85%;
+  background: linear-gradient(
+    to bottom,
+    #ffda85 0%,
+    #e88b32 45%,
+    #9b3d21 100%
+  );
+  border: 3px solid #ffc76d;
+  box-shadow:
+    0 12px 25px #0008,
+    0 0 20px #ffb34755;
+  transition: transform .3s, box-shadow .5s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.flame {
+.diya:hover {
+  transform: scale(1.06);
+}
+
+.diya::before {
+  content: "";
   position: absolute;
-  width: 14px;
-  height: 21px;
-  top: -23px;
-  left: -2px;
-  background: radial-gradient(ellipse, #fff8a0, #ff9d25, #ff4d39);
+  width: 45px;
+  height: 12px;
+  background: #ffdf9b;
+  border-radius: 50%;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.diya-wick {
+  position: absolute;
+  width: 5px;
+  height: 17px;
+  background: #4b241b;
+  border-radius: 5px;
+  top: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.diya-flame {
+  position: absolute;
+  width: 25px;
+  height: 40px;
+  top: -55px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center bottom,
+    #fffbd0 0%,
+    #ffe65b 35%,
+    #ff9c24 70%,
+    #ff542f 100%
+  );
   border-radius: 50% 50% 40% 40%;
-  box-shadow: 0 0 18px #ffb52e;
+  box-shadow:
+    0 0 15px #ffcf45,
+    0 0 35px #ff9c24,
+    0 0 65px #ff6a22;
+  opacity: 0;
+  transition: opacity .5s;
   animation: flicker .5s infinite alternate;
-  transform-origin: bottom;
+  transform-origin: bottom center;
+}
+
+.diya.lit {
+  box-shadow:
+    0 12px 25px #0008,
+    0 0 30px #ffb347,
+    0 0 65px #ff8b36;
+}
+
+.diya.lit .diya-flame {
+  opacity: 1;
 }
 
 @keyframes flicker {
-  to { transform: rotate(8deg) scale(.85); }
-}
-
-.candle.off .flame {
-  display: none;
+  from { rotate: -5deg; scale: .95; }
+  to { rotate: 5deg; scale: 1.05; }
 }
 
 /* Envelope */
@@ -238,7 +266,26 @@ button:disabled {
   animation: fadeIn 1s ease;
   white-space: pre-line;
   line-height: 1.9;
-  font-size: 17px;
+  font-size: 16px;
+  text-align: left;
+  margin: 15px auto;
+}
+
+.letter h2 {
+  text-align: center;
+  color: #9b3679;
+}
+
+.letter-content {
+  white-space: pre-line;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.signature {
+  text-align: right;
+  font-style: italic;
+  margin-top: 25px;
 }
 
 /* Falling sparkles */
@@ -258,6 +305,17 @@ button:disabled {
   }
 }
 
+@media (max-width: 480px) {
+  .letter {
+    padding: 20px;
+    font-size: 15px;
+  }
+
+  .letter h2 {
+    font-size: 22px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
@@ -272,21 +330,11 @@ button:disabled {
 
 <div id="stars"></div>
 
-<!-- STAGE 1: INVITATION -->
+<!-- PAGE 1: INVITATION -->
 
 <section class="screen active" id="stage1">
 
-  <div class="glow">💌</div>
-
-  <p>A little something has been waiting for you...</p>
-
-  <h1>Hey, My Favourite Person!</h1>
-
-  <p>
-    Today is not just another day.
-    Someone has made something special
-    just for you. ❤️
-  </p>
+  <h1>My Favourite Person!</h1>
 
   <button onclick="startSurprise()">
     Open Your Surprise ✨
@@ -297,7 +345,7 @@ button:disabled {
 </section>
 
 
-<!-- STAGE 2: BIRTHDAY REVEAL -->
+<!-- PAGE 2: BIRTHDAY REVEAL -->
 
 <section class="screen" id="stage2">
 
@@ -305,12 +353,7 @@ button:disabled {
 
   <h1>Happy Birthday!</h1>
 
-  <h2 id="personName"></h2>
-
-  <p>
-    Today, the stars shine a little brighter
-    because it's your special day! ✨
-  </p>
+  <h2 id="personName">GK ❤️</h2>
 
   <button onclick="goToCake()">
     There's More For You 💜
@@ -319,54 +362,47 @@ button:disabled {
 </section>
 
 
-<!-- STAGE 3: INTERACTIVE CAKE -->
+<!-- PAGE 3: LIGHT THE DIYA -->
 
 <section class="screen" id="stage3">
 
-  <h1>Make A Wish! 🎂</h1>
+  <h1>Make A Wish! 🪔</h1>
 
   <p>
-    Three little candles, three beautiful wishes.
-    Tap each candle flame to blow it out!
+    A little light for all the beautiful wishes
+    I have for you.
+    Tap the diya to light it! ❤️
   </p>
 
-  <div class="cake-area">
+  <div class="diya-area">
 
-    <div class="cake">
-
-      <div class="candles">
-
-        <div class="candle" onclick="blowCandle(0)">
-          <div class="flame"></div>
-        </div>
-
-        <div class="candle" onclick="blowCandle(1)">
-          <div class="flame"></div>
-        </div>
-
-        <div class="candle" onclick="blowCandle(2)">
-          <div class="flame"></div>
-        </div>
-
-      </div>
-
-      <div class="icing"></div>
-      <div class="cake-base"></div>
-
+    <div
+      class="diya"
+      id="diya"
+      onclick="lightDiya()"
+      role="button"
+      tabindex="0"
+      aria-label="Tap to light the diya"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();lightDiya();}"
+    >
+      <div class="diya-wick"></div>
+      <div class="diya-flame"></div>
     </div>
 
   </div>
 
-  <p id="candleStatus">3 wishes are waiting for you! 🕯️</p>
+  <p id="diyaStatus">
+    Your little light is waiting to shine ✨
+  </p>
 
-  <button id="cakeNext" onclick="goToLetter()" disabled>
+  <button id="diyaNext" onclick="goToLetter()" disabled>
     Open My Letter 💌
   </button>
 
 </section>
 
 
-<!-- STAGE 4: LOVE LETTER -->
+<!-- PAGE 4: LOVE LETTER -->
 
 <section class="screen" id="stage4">
 
@@ -382,12 +418,11 @@ button:disabled {
 
     <h2>To My Favourite Human ❤️</h2>
 
-    <div id="letterContent"></div>
+    <div class="letter-content" id="letterContent"></div>
 
-    <h2>Forever sending you hugs! 💗</h2>
-
-    <p>With all my love,</p>
-    <h2 id="senderName"></h2>
+    <div class="signature">
+      -your love.
+    </div>
 
   </div>
 
@@ -402,33 +437,75 @@ button:disabled {
 
 const CONFIG = {
 
-  birthdayPerson: "YOUR LOVE'S NAME",
-
-  yourName: "YOUR NAME",
+  birthdayPerson: "GK",
 
   birthdayMessage: `
 Happy Birthday, my love! ❤️
 
-I hope this new year of your life
-brings you endless happiness,
-beautiful memories and everything
-your heart wishes for.
+This year,
 
-Thank you for being you.
+1. I wish you heal from all the past traumas.
 
-You make ordinary days special,
-and I hope today makes you feel
-as special as you truly are.
+2. I wish you get to know how worthy you are.
 
-No matter where life takes us,
-I will always be cheering for you.
+3. I wish you always be surrounded with positive people.
 
-Keep smiling, keep shining,
-and never stop dreaming.
+4. I wish you get enough strength to handle anything.
 
-You deserve all the magic in this world.
+5. I wish you could be proud of yourself.
 
-Happy Birthday once again! 💜
+6. I wish you always shine bright.
+
+7. I wish there is always smile on your face.
+
+8. I wish you grow more wealthier.
+
+9. I wish you be more healthier.
+
+10. I wish you achieve everything you have ever dreamed of.
+
+11. I wish you have countless reasons to laugh.
+
+12. I wish every sleepless night turns into a beautiful morning.
+
+13. I wish you never feel alone.
+
+14. I wish you get all the love you deserve.
+
+15. I wish you create happier memories.
+
+16. I wish you never stop believing in yourself.
+
+17. I wish your silent prayers turns into beautiful reality.
+
+18. I wish you become the person your younger self wanted to be.
+
+19. I wish better opportunities find you.
+
+20. I wish you never lose your kind heart no matter how difficult the world gets.
+
+21. I wish you are loved, respected, appreciated everywhere.
+
+22. I wish you find peace in places where you felt pain.
+
+23. I wish you never question your importance
+(because you are the most important).
+
+24. I wish you never lose the things that makes you happy.
+
+25. I wish you learn to love yourself.
+
+26. I wish you never have to hide your tears in front of memories.
+
+27. I wish you never forget how special you are.
+
+28. I wish you get to experience the love you truly deserve.
+
+29. I WISH ALL OF YOUR WISHES TO COME TRUE.
+
+30. I WISH TO BE PART OF THAT WISHLIST.
+
+Once again, happy birthday ❤️
   `
 
 };
@@ -446,7 +523,6 @@ for (let i = 0; i < 65; i++) {
 
   star.className = "star";
   star.textContent = "✦";
-
   star.style.left = Math.random() * 100 + "%";
   star.style.top = Math.random() * 100 + "%";
 
@@ -491,7 +567,6 @@ function createSparkles(count = 100) {
     const sparkle = document.createElement("div");
 
     sparkle.className = "sparkle";
-
     sparkle.textContent =
       emojis[Math.floor(Math.random() * emojis.length)];
 
@@ -541,37 +616,27 @@ function goToCake() {
 
 
 // =====================================
-// BLOW OUT THE CANDLES
+// LIGHT THE DIYA
 // =====================================
 
-let candlesBlown = 0;
+let diyaIsLit = false;
 
-function blowCandle(index) {
+function lightDiya() {
 
-  const candle = document.querySelectorAll(".candle")[index];
-
-  if (candle.classList.contains("off")) {
+  if (diyaIsLit) {
     return;
   }
 
-  candle.classList.add("off");
+  diyaIsLit = true;
 
-  candlesBlown++;
+  document.getElementById("diya").classList.add("lit");
 
-  const remaining = 3 - candlesBlown;
+  document.getElementById("diyaStatus").textContent =
+    "May this light bring happiness, peace and endless blessings! ❤️";
 
-  document.getElementById("candleStatus").textContent =
-    remaining === 0
-      ? "All your wishes are released into the universe! 🌟"
-      : remaining + " more candle(s) to go! 💖";
+  document.getElementById("diyaNext").disabled = false;
 
-  if (candlesBlown === 3) {
-
-    createSparkles(100);
-
-    document.getElementById("cakeNext").disabled = false;
-
-  }
+  createSparkles(100);
 
 }
 
@@ -584,9 +649,6 @@ function goToLetter() {
 
   document.getElementById("letterContent").textContent =
     CONFIG.birthdayMessage.trim();
-
-  document.getElementById("senderName").textContent =
-    CONFIG.yourName;
 
   showStage(4);
 
